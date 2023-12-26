@@ -2,7 +2,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Text.Json.Serialization;
 
-namespace OsanScheduler.employees
+namespace OsanScheduler.Employees
 {
   public class Workday : IComparable<Workday> {
     public uint Id { get; set; }
