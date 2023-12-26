@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Volumes/Bottom/Projects/dotnet/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj": {}
+    "/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj": {}
   },
   "projects": {
-    "/Volumes/Bottom/Projects/dotnet/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj": {
+    "/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/Bottom/Projects/dotnet/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj",
+        "projectUniqueName": "/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj",
         "projectName": "SchedulerModels",
-        "projectPath": "/Volumes/Bottom/Projects/dotnet/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj",
+        "projectPath": "/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj",
         "packagesPath": "/Users/antonerne/.nuget/packages/",
-        "outputPath": "/Volumes/Bottom/Projects/dotnet/SchedulerModelsLibrary/SchedulerModels/obj/",
+        "outputPath": "/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/antonerne/.nuget/NuGet/NuGet.Config"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.23.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
