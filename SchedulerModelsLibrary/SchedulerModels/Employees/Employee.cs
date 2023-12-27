@@ -1,8 +1,10 @@
 using System.Runtime.Serialization;
+using System.Security.Principal;
 using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using OsanScheduler.employees;
+using ZstdSharp.Unsafe;
 
 namespace OsanScheduler.Employees 
 {
@@ -222,6 +224,150 @@ namespace OsanScheduler.Employees
         answer.Hours = leave.Hours;
       }
       return answer;
+    }
+
+    public Workday? GetWorkdayWOLeave(DateTime date) {
+      Workday? answer = null;
+      double work = 0.0;
+      double stdWorkday = 8.0;
+      DateTime lastWork = new DateTime(0);
+      string siteID = "";
+      string stdCode = "";
+      string stdWkctr = "";
+      // get current standard work day hours for date/assignment
+      foreach (Assignment asgmt in this.Assignments) {
+        if (asgmt.UseAssignment(this.SiteID, date)) {
+          stdWorkday = asgmt.GetStandardWorkday();
+          stdCode = asgmt.GetStandardCode(date);
+          stdWkctr = asgmt.Workcenter;
+        }
+      }
+      // determine if the recorded work was completed on the date and also
+      // determine the last recorded work hours from timesheet data.
+      foreach (Work wk in this.Work) {
+        if (wk.DateWorked.Year == date.Year && wk.DateWorked.Month == date.Month 
+          && wk.DateWorked.Day == date.Day) {
+          work += wk.Hours;
+        }
+        if (wk.DateWorked.CompareTo(lastWork) > 0) {
+          lastWork = new DateTime(wk.DateWorked.Ticks);
+        }
+      }
+      // check for assignment to assign to workday
+      foreach (Assignment asgmt in this.Assignments) {
+        if (asgmt.StartDate.CompareTo(date) <= 0 
+          && asgmt.EndDate.CompareTo(date) >= 0) {
+          siteID = asgmt.Site;
+          answer = asgmt.GetWorkday(date);
+        }
+      }
+      // check for variation which will override the workday
+      foreach (Variation vari in this.Variations) {
+        if (vari.StartDate.CompareTo(date) <= 0 
+          && vari.EndDate.CompareTo(date) >= 0) {
+          answer = vari.GetWorkday(this.SiteID, date);
+        }  
+      }
+      // if actual worked hours > 0 return the workday. If workday is null,
+      // create new one with standard code and hours worked.
+      if (work > 0.0) {
+        if (answer != null) {
+          return answer;
+        }
+        return new Workday() {
+          Id = 0,
+          Workcenter = stdWkctr,
+          Code = stdCode,
+          Hours = work
+        };
+      }
+      return answer;
+    }
+
+    public double GetStandardWorkday(DateTime date) {
+      for (int i = 0; i < this.Assignments.Count; i++) {
+        if (this.Assignments[i].UseAssignment(this.SiteID, date)) {
+          return this.Assignments[i].GetStandardWorkday();
+        }
+      }
+      return 0.0;
+    }
+
+    public void AddAssignment(string site, string wkctr, DateTime start) {
+      this.Assignments.Sort();
+      Assignment newAsgmt = new Assignment() {
+        Id = (uint)this.Assignments.Count,
+        Site = site,
+        Workcenter = wkctr,
+        StartDate = new DateTime(start.Ticks),
+        EndDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+      };
+      newAsgmt.AddSchedule(7);
+      for (int i=1; i < 6; i++) {
+        newAsgmt.Schedules[0].UpdateWorkday((uint)i, wkctr, "D", 8.0);
+      }
+      this.Assignments[this.Assignments.Count - 1].EndDate 
+        = start.AddHours(-6.0);
+      this.Assignments.Add(newAsgmt);
+      this.Assignments.Sort();
+    }
+
+    public void RemoveAssignment(uint id) {
+      this.Assignments.Sort();
+      bool found = false;
+      for (int i = 0; i < this.Assignments.Count && !found; i++) 
+      {
+        if (this.Assignments[i].Id == id) {
+          if (i > 0 && i < this.Assignments.Count - 1) {
+            this.Assignments[i-1].EndDate 
+              = this.Assignments[i+1].StartDate.AddHours(-6.0);
+          } else if (i == this.Assignments.Count - 1) {
+            this.Assignments[this.Assignments.Count - 2].EndDate
+              = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+          }
+          found = true;
+          this.Assignments.RemoveAt(i);
+        }
+      }
+    }
+
+    public bool PurgeOldData(DateTime date) {
+      // remove variations before date
+      this.Variations.Sort();
+      for (int i = this.Variations.Count - 1; i >= 0; i--) {
+        if (this.Variations[i].EndDate.CompareTo(date) < 0) {
+          this.Variations.RemoveAt(i);
+        }
+      }
+
+      // remove leaves before date
+      for (int i = this.Leaves.Count - 1; i >= 0; i--) {
+        if (this.Leaves[i].LeaveDate.CompareTo(date) <= 0) {
+          this.Leaves.RemoveAt(i);
+        }
+      }
+
+      // remove leave requests before date, based on end date
+      this.Requests.Sort();
+      for (int i = this.Requests.Count - 1; i >= 0; i--) {
+        if (this.Requests[i].EndDate.CompareTo(date) < 0) {
+          this.Requests.RemoveAt(i);
+        }
+      }
+
+      // remove leave/annual balances before the year of the date
+      this.Balances.Sort();
+      for (int i = this.Balances.Count - 1; i >= 0; i--) {
+        if (this.Balances[i].Year < date.Year ) {
+          this.Balances.RemoveAt(i);
+        }
+      }
+
+      // check to see if employee quit before date based on last 
+      // assignment enddate.
+      this.Assignments.Sort();
+      Assignment asgmt = this.Assignments[this.Assignments.Count - 1];
+      return (asgmt.EndDate.CompareTo(date) < 0);
     }
   }
 }

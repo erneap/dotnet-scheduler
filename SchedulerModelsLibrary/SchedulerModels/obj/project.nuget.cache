@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "89jbizDACdOOQtJdhwVnP2+veu9Bl+YJno1kHNYzsGndtjMZb2AwvQw9RH4lZfTle8C8Ju13DjIVTTd2fofqog==",
+  "dgSpecHash": "17ZuCH488AZFsdIf5F6qpVEtmsj85mFKykfK3vaSf+mmxfvc0DnmppUvV90neCHav75kPAuZikeMp1xqXLIIPw==",
   "success": true,
-  "projectFilePath": "/Volumes/Bottom/Projects/dotnet/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj",
+  "projectFilePath": "/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj",
   "expectedPackageFiles": [
     "/Users/antonerne/.nuget/packages/awssdk.core/3.7.100.14/awssdk.core.3.7.100.14.nupkg.sha512",
     "/Users/antonerne/.nuget/packages/awssdk.securitytoken/3.7.100.14/awssdk.securitytoken.3.7.100.14.nupkg.sha512",

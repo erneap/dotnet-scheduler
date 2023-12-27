@@ -1,0 +1,6 @@
+/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/obj/Debug/net8.0/SchedulerModels.csproj.AssemblyReference.cache
+/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/obj/Debug/net8.0/SchedulerModels.GeneratedMSBuildEditorConfig.editorconfig
+/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/obj/Debug/net8.0/SchedulerModels.AssemblyInfoInputs.cache
+/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/obj/Debug/net8.0/SchedulerModels.AssemblyInfo.cs
+/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/obj/Debug/net8.0/SchedulerModels.csproj.CoreCompileInputs.cache
+/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/obj/Debug/net8.0/SchedulerModels.sourcelink.json
