@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Data;
 using System.Text.Json.Serialization;
 
 namespace OsanScheduler.Employees
@@ -27,11 +28,8 @@ namespace OsanScheduler.Employees
 
     public int CompareTo(Workday? other) 
     {
-      if (other != null && other.Id < this.Id) {
-        return 1;
-      }
-      if (other != null && other.Id > this.Id) {
-        return -1;
+      if (other != null) {
+        return this.Id.CompareTo(other.Id);
       }
       return 0;
     }
@@ -50,11 +48,8 @@ namespace OsanScheduler.Employees
     }
     public int CompareTo(Schedule? other) 
     {
-      if (other != null && other.Id < this.Id) {
-        return 1;
-      }
-      if (other != null && other.Id > this.Id) {
-        return -1;
+      if (other != null) {
+        return this.Id.CompareTo(other.Id);
       }
       return 0;
     }
@@ -111,29 +106,47 @@ namespace OsanScheduler.Employees
         }
       }
     }
+
+    public string GetStandardWorkCode() {
+      var codeMap = new Dictionary<string, int>();
+      foreach (Workday wd in this.Workdays) {
+        if (wd.Code != "") {
+          int iValue = 0;
+          codeMap.TryGetValue(wd.Code, out iValue);
+          iValue++;
+          codeMap[wd.Code] = iValue;
+        }
+      }
+      int Max = 0;
+      string answer = "";
+      foreach (var pair in codeMap) {
+        if (pair.Value > Max) {
+          Max = pair.Value;
+          answer = pair.Key;
+        }
+      }
+      return answer;
+    }
   }
 
-  public class EmployeeLaborCode : IComparable<EmployeeLaborCode>
+  public class LaborCode : IComparable<LaborCode>
   {
     [BsonElement("chargeNumber")]
     [JsonPropertyName("chargeNumber")]
-    public string ChargeNumber { get; set; }
-    public string Extension { get; set; }
+    public string ChargeNumber { get; set; } = "";
+    public string Extension { get; set; } = "";
+  
 
-    public EmployeeLaborCode() {
-      this.ChargeNumber = "";
-      this.Extension = "";
-    }
-
-    public int CompareTo(EmployeeLaborCode? other) 
+    public int CompareTo(LaborCode? other) 
     {
-      if (other != null && other.ChargeNumber != null 
-        && other.ChargeNumber.CompareTo(this.ChargeNumber) == 0) {
-        return (other != null && other.Extension != null) 
-          ? other.Extension.CompareTo(this.Extension) : 0;
+      if (other != null) 
+      {
+        if (this.ChargeNumber.CompareTo(other.ChargeNumber) == 0) {
+          return this.Extension.CompareTo(other.Extension);
+        }
+        return this.ChargeNumber.CompareTo(other.ChargeNumber);
       }
-      return (other != null && other.ChargeNumber != null) 
-        ? other.ChargeNumber.CompareTo(this.ChargeNumber) : 0;
+      return 0;
     }
   }
   
@@ -152,7 +165,7 @@ namespace OsanScheduler.Employees
     public int Rotationdays { get; set; }
     [BsonElement("laborcodes")]
     [JsonPropertyName("laborcodes")]
-    public List<EmployeeLaborCode> LaborCodes { get; set; }
+    public List<LaborCode> LaborCodes { get; set; }
 
     public Assignment() {
       this.Id = (uint) 0;
@@ -163,7 +176,7 @@ namespace OsanScheduler.Employees
       this.Schedules = new List<Schedule>();
       this.Rotationdate = new DateTime(0);
       this.Rotationdays = 0;
-      this.LaborCodes = new List<EmployeeLaborCode>();
+      this.LaborCodes = new List<LaborCode>();
     }
 
     public int CompareTo(Assignment? other)
@@ -215,6 +228,23 @@ namespace OsanScheduler.Employees
         return this.Schedules[schID].GetWorkday((uint)iDay);
       }
       return null;
+    }
+
+    public string GetStandardCode(DateTime date) {
+      DateTime start = new DateTime(this.StartDate.Ticks);
+      while (start.DayOfWeek != DayOfWeek.Sunday) {
+        start = start.AddDays(-1.0);
+      }
+      int days = (int)(date.Subtract(start).Hours / 24.0);
+      if (this.Schedules.Count == 1 || this.Rotationdays <= 0) 
+      {
+        return this.Schedules[0].GetStandardWorkCode();
+      } else if (this.Schedules.Count > 1)
+      {
+        int schID = (days / this.Rotationdays) % this.Schedules.Count;
+        return this.Schedules[schID].GetStandardWorkCode();
+      }
+      return "";
     }
 
     public void AddSchedule(int days)
@@ -288,14 +318,14 @@ namespace OsanScheduler.Employees
       bool found = false;
       for (int i=0; i < this.LaborCodes.Count && !found; i++)
       {
-        EmployeeLaborCode lc = this.LaborCodes[i];
+        LaborCode lc = this.LaborCodes[i];
         if (lc.ChargeNumber.ToLower().Equals(chgNo.ToLower()) 
           && lc.Extension.ToLower().Equals(ext.ToLower())) {
           found = true;
         }
       }
       if (!found) {
-        this.LaborCodes.Add(new EmployeeLaborCode() {
+        this.LaborCodes.Add(new LaborCode() {
           ChargeNumber = chgNo,
           Extension = ext
         });
@@ -307,7 +337,7 @@ namespace OsanScheduler.Employees
       bool found = false;
       for (int i=0; i < this.LaborCodes.Count && !found; i++)
       {
-        EmployeeLaborCode lc = this.LaborCodes[i];
+        LaborCode lc = this.LaborCodes[i];
         if (lc.ChargeNumber.ToLower().Equals(chgNo.ToLower()) 
           && lc.Extension.ToLower().Equals(ext.ToLower())) {
           found = true;

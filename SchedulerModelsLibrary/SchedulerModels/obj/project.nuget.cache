@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "GBWLD7EuZal8Xcl+5O9Cbwsr2HDuMn5lKGgxcfm/nm73GiKBISe/vSjw0Rylrip6VL0jquVwbq1OW1M7h7VAaQ==",
+  "dgSpecHash": "89jbizDACdOOQtJdhwVnP2+veu9Bl+YJno1kHNYzsGndtjMZb2AwvQw9RH4lZfTle8C8Ju13DjIVTTd2fofqog==",
   "success": true,
-  "projectFilePath": "/Users/antonerne/Projects/dotnet-scheduler/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj",
+  "projectFilePath": "/Volumes/Bottom/Projects/dotnet/SchedulerModelsLibrary/SchedulerModels/SchedulerModels.csproj",
   "expectedPackageFiles": [
     "/Users/antonerne/.nuget/packages/awssdk.core/3.7.100.14/awssdk.core.3.7.100.14.nupkg.sha512",
     "/Users/antonerne/.nuget/packages/awssdk.securitytoken/3.7.100.14/awssdk.securitytoken.3.7.100.14.nupkg.sha512",
+    "/Users/antonerne/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/antonerne/.nuget/packages/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",
     "/Users/antonerne/.nuget/packages/microsoft.extensions.logging.abstractions/2.0.0/microsoft.extensions.logging.abstractions.2.0.0.nupkg.sha512",
     "/Users/antonerne/.nuget/packages/microsoft.netcore.platforms/5.0.0/microsoft.netcore.platforms.5.0.0.nupkg.sha512",
