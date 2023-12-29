@@ -2,6 +2,7 @@ using System.Runtime.Serialization;
 using System.Security.Principal;
 using System.Text.Json.Serialization;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization.Attributes;
 using OsanScheduler.employees;
 using ZstdSharp.Unsafe;
@@ -368,6 +369,159 @@ namespace OsanScheduler.Employees
       this.Assignments.Sort();
       Assignment asgmt = this.Assignments[this.Assignments.Count - 1];
       return (asgmt.EndDate.CompareTo(date) < 0);
+    }
+
+    public void CreateLeaveBalance(int year) {
+      bool found = false;
+      double lastAnnual = 0.0;
+      double lastCarry = 0.0;
+      for (int i = 0; i < this.Balances.Count && !found; i++) {
+        if (this.Balances[i].Year == year) {
+          found = true;
+        } else if (this.Balances[i].Year == year - 1) {
+          lastAnnual = this.Balances[i].Annual;
+          lastCarry = this.Balances[i].Carryover;
+        }
+      }
+      if (!found) {
+        AnnualLeave balance = new AnnualLeave() {
+          Year = year,
+          Annual = lastAnnual,
+          Carryover = 0.0
+        };
+        if (lastAnnual == 0.0) {
+          balance.Annual = 120.0;
+        } else {
+          double carry = lastAnnual + lastCarry;
+          for (int i = 0; i < this.Leaves.Count; i++) {
+            if (this.Leaves[i].LeaveDate.Year == year - 1 
+              && this.Leaves[i].Code.ToLower().Equals("v")
+              && this.Leaves[i].Status.ToLower().Equals("actual")) {
+              carry -= this.Leaves[i].Hours;
+            }
+            balance.Carryover = carry;
+          }
+        }
+        this.Balances.Add(balance);
+        this.Balances.Sort();
+      }
+    }
+
+    public void UpdateAnnualLeave(int year, double annual, double carry) {
+      bool found = false;
+      for (int i=0; i < this.Balances.Count && !found; i++) {
+        if (this.Balances[i].Year == year) {
+          found = true;
+          this.Balances[i].Annual = annual;
+          this.Balances[i].Carryover = carry;
+        }
+      }
+      if (!found) {
+        AnnualLeave balance = new AnnualLeave() {
+          Year = year,
+          Annual = annual,
+          Carryover = carry
+        };
+        this.Balances.Add(balance);
+        this.Balances.Sort();
+      }
+    }
+
+    public void AddLeave(int id, DateTime date, string code, 
+      string status, double hours, ObjectId? requestID) {
+      bool found = false;
+      int max = 0;
+      for (int i=0; i < this.Leaves.Count && !found; i++) {
+        if ((this.Leaves[i].LeaveDate.Equals(date)
+          && this.Leaves[i].Code.ToLower() == code.ToLower())
+          || this.Leaves[i].Id == id) {
+          found = true;
+          this.Leaves[i].Status = status;
+          this.Leaves[i].Hours = hours;
+          if (requestID != null) {
+#pragma warning disable CS8601 // Possible null reference assignment.
+            this.Leaves[i].RequestID = requestID.ToString();
+#pragma warning restore CS8601 // Possible null reference assignment.
+          }
+        } else if (this.Leaves[i].Id > max) {
+          max = this.Leaves[i].Id;
+        }
+      }
+      if (!found) {
+        LeaveDay day = new LeaveDay() {
+          Id = max + 1,
+          LeaveDate = new DateTime(date.Ticks),
+          Code = code,
+          Hours = hours,
+          Status = status,
+        };
+        if (requestID != null) {
+#pragma warning disable CS8601 // Possible null reference assignment.
+          day.RequestID = requestID.ToString();
+#pragma warning restore CS8601 // Possible null reference assignment.
+        }
+        this.Leaves.Add(day);
+        this.Leaves.Sort();
+      }
+    }
+
+    public LeaveDay? UpdateLeave(int id, string field, string value) {
+      bool found = false;
+      for (int i=0; i < this.Leaves.Count && !found; i++) {
+        if (this.Leaves[i].Id == id) {
+          LeaveDay day = new LeaveDay() {
+            Id = this.Leaves[i].Id,
+            LeaveDate = new DateTime(this.Leaves[i].LeaveDate.Ticks),
+            Hours = this.Leaves[i].Hours,
+            Status = this.Leaves[i].Status,
+            RequestID = this.Leaves[i].RequestID
+          };
+          switch (field.ToLower()) {
+            case "date":
+              this.Leaves[i].LeaveDate 
+                = DateTime.ParseExact(value, "MM/dd/yyyy", null);
+              break;
+            case "code":
+              this.Leaves[i].Code = value;
+              break;
+            case "hours":
+              this.Leaves[i].Hours = double.Parse(value, null);
+              break;
+            case "status":
+              this.Leaves[i].Status = value;
+              break;
+            case "requestid":
+              this.Leaves[i].RequestID = value;
+              break;
+          }
+          return day;
+        }
+      }
+      return null;
+    }
+
+    public LeaveDay? DeleteLeave(int id) {
+      for (int i=0; i < this.Leaves.Count; i++) {
+        if (this.Leaves[i].Id == id) {
+          LeaveDay day = this.Leaves[i];
+          this.Leaves.RemoveAt(i);
+          return day;
+        }
+      }
+      return null;
+    }
+
+    public double GetLeaveHours(DateTime start, DateTime end) {
+      double answer = 0.0;
+      this.Leaves.Sort();
+      for (int i=0; i < this.Leaves.Count; i++) {
+        if (this.Leaves[i].LeaveDate.CompareTo(start) >= 0 
+          && this.Leaves[i].LeaveDate.CompareTo(end) < 0 
+          && this.Leaves[i].Status.ToLower() == "actual") {
+          answer += this.Leaves[i].Hours;
+        }
+      }
+      return answer;
     }
   }
 }
