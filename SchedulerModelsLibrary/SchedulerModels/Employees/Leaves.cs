@@ -111,8 +111,34 @@ namespace OsanScheduler.Employees
       }
     }
 
-    public void SetLeaveDays() {
-      
+    public void SetLeaveDays(Employee emp) {
+      DateTime rStart = new DateTime(this.StartDate.Ticks);
+      this.RequestedDays.Clear();
+      while (rStart.CompareTo(this.EndDate) <= 0) {
+        var wd = emp.GetWorkdayWOLeave(rStart);
+        if (wd.Code != "") {
+          var hours = wd.Hours;
+          if (hours == 0.0) {
+            hours = emp.GetStandardWorkday(rStart);
+          }
+          if (this.PrimaryCode.ToLower().Equals("h")) {
+            hours = 8.0;
+          }
+          this.RequestedDays.Add(new LeaveDay() {
+            LeaveDate = new DateTime(rStart.Ticks),
+            Code = this.PrimaryCode,
+            Hours = hours,
+            Status = "REQUESTED",
+            RequestID = this.Id
+          });
+        }
+      }
+      this.RequestedDays.Sort();
     }
+  }
+
+  public class LeaveRequestUpdate {
+    public string Message { get; set; } = "";
+    public LeaveRequest? Request { get; set; } = null;
   }
 }

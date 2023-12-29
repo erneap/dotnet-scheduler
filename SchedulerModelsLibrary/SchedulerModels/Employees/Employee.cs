@@ -1,6 +1,7 @@
 using System.Runtime.Serialization;
 using System.Security.Principal;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Logging.Internal;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization.Attributes;
@@ -522,6 +523,126 @@ namespace OsanScheduler.Employees
         }
       }
       return answer;
+    }
+
+    public double GetPTOHours(DateTime start, DateTime end) {
+      double answer = 0.0;
+      this.Leaves.Sort();
+      for (int i=0; i < this.Leaves.Count; i++) {
+        if (this.Leaves[i].LeaveDate.CompareTo(start) >= 0 
+          && this.Leaves[i].LeaveDate.CompareTo(end) < 0 
+          && this.Leaves[i].Status.ToLower() == "actual"
+          && this.Leaves[i].Code.ToLower() == "v") {
+          answer += this.Leaves[i].Hours;
+        }
+      }
+      return answer;
+    }
+
+    public LeaveRequest? NewLeaveRequest(string code, DateTime start, DateTime end, 
+    string comment) {
+      // check to see if a leave request already exists for time period
+      // entered.
+      bool found = false;
+      for (int i = 0; i < this.Requests.Count && !found; i++) {
+        if (this.Requests[i].StartDate.CompareTo(start) == 0 
+          && this.Requests[i].EndDate.CompareTo(end) == 0) {
+          return this.Requests[i];
+        }
+      }
+      // create new leave request if period is not found
+      if (!found) {
+        LeaveRequest lr = new LeaveRequest() {
+          Id = ObjectId.GenerateNewId().ToString(),
+          EmployeeID = this.Id.ToString(),
+          RequestDate = DateTime.UtcNow,
+          PrimaryCode = code,
+          StartDate = start,
+          EndDate = end,
+          Status = "DRAFT"
+        };
+        LeaveRequestComment lrc = new LeaveRequestComment() {
+          CommentDate = DateTime.UtcNow,
+          Comment = "Leave Request created."
+        };
+        lr.Comments.Add(lrc);
+        if (comment != "") {
+          lrc = new LeaveRequestComment() {
+            CommentDate = DateTime.UtcNow,
+            Comment = comment
+          };
+          lr.Comments.Add(lrc);
+        }
+        lr.Comments.Sort();
+
+        // create the the request days for the period but only for
+        // days where the employee is already scheduled for work.
+        DateTime rStart = new DateTime(start.Ticks);
+        while (rStart.CompareTo(end) <= 0) {
+          Workday? wd = this.GetWorkdayWOLeave(rStart);
+          if (wd != null && wd.Code != "") {
+            var hours = wd.Hours;
+            if (hours == 0.0) {
+              hours = this.GetStandardWorkday(rStart);
+            }
+            if (code.ToLower() == "h") {
+              hours = 8.0;
+            }
+            LeaveDay day = new LeaveDay() {
+              LeaveDate = new DateTime(rStart.Ticks),
+              Code = code,
+              Hours = hours,
+              Status = "DRAFT",
+              RequestID = lr.Id
+            };
+            lr.RequestedDays.Add(day);
+          }
+          rStart = rStart.AddDays(1.0);
+        }
+        lr.RequestedDays.Sort();
+        this.Requests.Add(lr);
+        this.Requests.Sort();
+        return lr;
+      }
+      return null;
+    }
+
+    public LeaveRequestUpdate UpdateLeaveRequest(string id, string field, 
+    string value) {
+      var message = "";
+      LeaveRequest? request = null;
+      bool found = false;
+      for (int i = 0; i < this.Requests.Count && !found; i++) {
+        if (this.Requests[i].Id.Equals(id)) {
+          request = this.Requests[i];
+          switch (field.ToLower()) {
+            case "startdate":
+            case "start":
+              DateTime date = DateTime.ParseExact(value, "yyyy-MM-dd", null);
+              if (date.CompareTo(request.StartDate) < 0 
+              || date.CompareTo(request.EndDate) > 0) {
+                if (request.Status.ToLower() == "approved") {
+                  request.Status = "REQUESTED";
+                  request.ApprovalDate = new DateTime(0);
+                  request.ApprovedBy = "";
+                  message = "Leave Request from " + this.Name.GetLastFirst()
+                    + ": Starting date changed needs reapproval";
+                }
+                // since date changes invalidate the leave request approval,
+                // remove any approved leaves for the associated request id
+                this.Leaves.Sort();
+                for (int j = this.Leaves.Count - 1; j >= 0; j--) {
+                  if (this.Leaves[j].RequestID.Equals(request.Id) 
+                    && !this.Leaves[j].Status.ToLower().Equals("actual")) {
+                    this.Leaves.RemoveAt(j);
+                  }
+                }
+              }
+              break;
+          }
+        }
+      }
+      return new LeaveRequestUpdate();
     }
   }
 }
