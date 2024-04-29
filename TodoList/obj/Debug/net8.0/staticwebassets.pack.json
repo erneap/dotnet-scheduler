@@ -1,0 +1,61 @@
+{
+  "Files": [
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/bin/Debug/net8.0/wwwroot/_framework/blazor.webassembly.js",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/obj/Debug/net8.0/compressed/z2ei7not6b.gz",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js.gz"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/obj/Debug/net8.0/scopedcss/bundle/TodoList.styles.css",
+      "PackagePath": "staticwebassets/TodoList.styles.css"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/wwwroot/css/app.css",
+      "PackagePath": "staticwebassets/css/app.css"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/wwwroot/css/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/wwwroot/css/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/wwwroot/icon-192.png",
+      "PackagePath": "staticwebassets/icon-192.png"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/TodoList/wwwroot/sample-data/weather.json",
+      "PackagePath": "staticwebassets/sample-data/weather.json"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.TodoList.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.TodoList.props",
+      "PackagePath": "build\\TodoList.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.TodoList.props",
+      "PackagePath": "buildMultiTargeting\\TodoList.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.TodoList.props",
+      "PackagePath": "buildTransitive\\TodoList.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
