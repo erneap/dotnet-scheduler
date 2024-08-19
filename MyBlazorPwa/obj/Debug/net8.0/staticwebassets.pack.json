@@ -1,0 +1,77 @@
+{
+  "Files": [
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/bin/Debug/net8.0/wwwroot/_framework/blazor.webassembly.js",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/obj/Debug/net8.0/compressed/53n7tpsn6z.gz",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js.gz"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/obj/Debug/net8.0/scopedcss/bundle/MyBlazorPwa.styles.css",
+      "PackagePath": "staticwebassets/MyBlazorPwa.styles.css"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/obj/Debug/net8.0/service-worker-assets.js",
+      "PackagePath": "staticwebassets/service-worker-assets.js"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/obj/Debug/net8.0/service-worker/service-worker.published.js",
+      "PackagePath": "staticwebassets/service-worker.js"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/css/app.css",
+      "PackagePath": "staticwebassets/css/app.css"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/css/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/css/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/icon-192.png",
+      "PackagePath": "staticwebassets/icon-192.png"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/icon-512.png",
+      "PackagePath": "staticwebassets/icon-512.png"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/manifest.webmanifest",
+      "PackagePath": "staticwebassets/manifest.webmanifest"
+    },
+    {
+      "Id": "/Volumes/Bottom/Projects/dotnet/MyBlazorPwa/wwwroot/sample-data/weather.json",
+      "PackagePath": "staticwebassets/sample-data/weather.json"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.MyBlazorPwa.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.MyBlazorPwa.props",
+      "PackagePath": "build\\MyBlazorPwa.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.MyBlazorPwa.props",
+      "PackagePath": "buildMultiTargeting\\MyBlazorPwa.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.MyBlazorPwa.props",
+      "PackagePath": "buildTransitive\\MyBlazorPwa.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

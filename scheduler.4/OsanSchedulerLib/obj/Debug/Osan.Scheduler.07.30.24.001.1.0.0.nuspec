@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Osan.Scheduler.07.30.24.001</id>
+    <version>1.0.0</version>
+    <authors>Anton P. Erne</authors>
+    <description>Package Description</description>
+    <repository type="git" commit="ecbe0538267fd51cac3104cbf2333c0f417c6bbe" />
+    <dependencies>
+      <group targetFramework="net8.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/bin/Debug/net8.0/OsanSchedulerLib.dll" target="lib/net8.0/OsanSchedulerLib.dll" />
+  </files>
+</package>

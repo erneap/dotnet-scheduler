@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>OsanScheduler</id>
+    <version>1.0.1</version>
+    <authors>Anton P. Erne</authors>
+    <description>Package Description</description>
+    <repository type="git" commit="ecbe0538267fd51cac3104cbf2333c0f417c6bbe" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="BCrypt.Net-Next" version="4.0.3" exclude="Build,Analyzers" />
+        <dependency id="MongoDB.Driver" version="2.28.0" exclude="Build,Analyzers" />
+        <dependency id="System.IdentityModel.Tokens.Jwt" version="8.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/bin/Release/net8.0/OsanSchedulerLib.dll" target="lib/net8.0/OsanSchedulerLib.dll" />
+  </files>
+</package>

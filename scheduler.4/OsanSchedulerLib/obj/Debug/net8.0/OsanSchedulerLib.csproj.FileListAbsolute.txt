@@ -1,0 +1,12 @@
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/bin/Debug/net8.0/OsanSchedulerLib.deps.json
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/bin/Debug/net8.0/OsanSchedulerLib.dll
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/bin/Debug/net8.0/OsanSchedulerLib.pdb
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/OsanSchedulerLib.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/OsanSchedulerLib.AssemblyInfoInputs.cache
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/OsanSchedulerLib.AssemblyInfo.cs
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/OsanSchedulerLib.csproj.CoreCompileInputs.cache
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/OsanSchedulerLib.sourcelink.json
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/OsanSchedulerLib.dll
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/refint/OsanSchedulerLib.dll
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/OsanSchedulerLib.pdb
+/Volumes/Bottom/Projects/dotnet/scheduler/OsanSchedulerLib/obj/Debug/net8.0/ref/OsanSchedulerLib.dll
